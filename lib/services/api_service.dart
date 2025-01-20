@@ -11,11 +11,11 @@ class ApiService {
     return ProductModel.fetch(response.data);
   }
 
-  static Future<bool> Signin(SigninModel model) async {
+  static Future<bool> Signin(String email, String password) async {
     var response =
         await dio.post('https://student.valuxapps.com/api/login', data: {
-      'email': model.email,
-      'password': model.password,
+      'email': email,
+      'password': password,
     });
     return response.data['status'];
   }

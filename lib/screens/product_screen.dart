@@ -9,54 +9,44 @@ class ProductScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<ProductProvider>(context, listen: true);
+    provider.fetchData();
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: const Text('Products'),
       ),
-      body: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, crossAxisSpacing: 5, mainAxisSpacing: 5),
-          itemCount: provider.products.isEmpty ? 5 : provider.products.length,
-          itemBuilder: (context, index) {
-            provider.fetchData();
-            if (provider.products.isEmpty) {
-              return const CircularProgressIndicator();
-            }
-            return InkWell(
-              borderRadius: BorderRadius.circular(12),
-              child: Container(
-                color: Colors.green,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Image.network(
-                      provider.products[index].image,
-                      width: 100,
-                      height: 100,
+      body: Padding(
+        padding: const EdgeInsets.all(12),
+        child: provider.products.isEmpty
+            ? const Center(child: CircularProgressIndicator())
+            : GridView.builder(
+                itemCount: provider.products.length,
+                itemBuilder: (context, index) => InkWell(
+                      child: Container(
+                        color: Colors.green,
+                        child: Column(
+                          children: [
+                            Image.network(provider.products[index].image,
+                                height: 100, width: 100),
+                            Text('Name: ${provider.products[index].name}',
+                                overflow: TextOverflow.ellipsis),
+                            Text('Price: ${provider.products[index].price}'),
+                          ],
+                        ),
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ProductDetailsScreen(
+                                    product: provider.products[index])));
+                      },
                     ),
-                    Text(
-                      'Name: ${provider.products[index].name}',
-                      style: const TextStyle(fontSize: 13),
-                      textAlign: TextAlign.center,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text(
-                      'Price: ${provider.products[index].price}',
-                      style: const TextStyle(fontSize: 13),
-                      textAlign: TextAlign.center,
-                    )
-                  ],
-                ),
-              ),
-              onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        ProductDetailsScreen(product: provider.products[index]),
-                  )),
-            );
-          }),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 10,
+                    crossAxisSpacing: 10)),
+      ),
     );
   }
 }

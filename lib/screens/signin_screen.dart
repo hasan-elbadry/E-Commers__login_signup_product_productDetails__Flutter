@@ -42,6 +42,11 @@ class SigninScreen extends StatelessWidget {
                         MaterialPageRoute(
                           builder: (context) => const ProductScreen(),
                         ));
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text('error'),
+                      showCloseIcon: true,
+                    ));
                   }
                 },
                 style: const ButtonStyle(

@@ -7,7 +7,6 @@ class SigninProvider with ChangeNotifier {
   var password = TextEditingController();
 
   Future<bool> isSignin() async {
-    return await ApiService.Signin(
-        SigninModel(email: email.text, password: password.text));
+    return await ApiService.Signin(email.text, password.text);
   }
 }
